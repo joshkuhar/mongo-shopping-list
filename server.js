@@ -41,7 +41,7 @@ app.get('/items', function(req, res) {
                 message: 'Internal Server Error'
             });
         }
-        res.json(items);
+        res.status(200).json(items);
     });
 });
 
@@ -58,11 +58,37 @@ app.post('/items', function(req, res) {
     });
 });
 
+
+app.put('/items/:id', function(req, res) {
+    Item.findByIdAndUpdate(req.params.id, {
+        name: req.body.name
+    }, function(err) {
+        if (err) {
+            console.log(err);
+        }
+        res.status(201).end();
+    });
+});
+
+app.delete('/items/:id', function(req, res) {
+    Item.findByIdAndRemove(req.params.id, function(err) {
+        if (err) {
+            console.log(err);
+        }
+        res.status(204).end();
+
+    });
+});
+
+
 app.use('*', function(req, res) {
     res.status(404).json({
         message: 'Not Found'
     });
 });
+
+//put and delete methods
+
 
 exports.app = app;
 exports.runServer = runServer;
